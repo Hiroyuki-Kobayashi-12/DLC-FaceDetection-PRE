@@ -1,49 +1,44 @@
-# DLC26 Face Detection
+# DLC Face Detection PRE 利用ガイド
 
-DLC26前半に実施する、WIDER FACEを用いた顔検出ワークショップのリポジトリです。
+この文書は、DLC参加者がGitHubとVS Codeを使って、顔検出の実験環境を安全に利用するための手順とルールをまとめたものです。
 
-## 1. 目的
+練習用リポジトリ：
 
-本ワークショップでは、共通の顔検出環境を土台として、参加者がそれぞれ自由にモデルや学習方法を試します。
-
-モデルの性能向上だけでなく、以下を経験することも目的とします。
-
-- GitHubを使用したコード管理
-- Branchによる作業環境の分離
-- Commitによる実験履歴の記録
-- Kaggleを使用したモデル学習
-- ローカル環境を使用した推論と評価
-- Pull Requestを使用した成果共有
-- 他の参加者とのディスカッション
-- 複数の成果を一つにまとめる経験
-
-完成した結果だけでなく、途中経過、困り事、予想と異なる結果、失敗した実験も共有します。
-
-参加者同士が気軽に質問や相談を行い、それぞれの試行錯誤をチーム全体の知見へ変えていくことを大切にします。
+- [DLC-FaceDetection-PRE](https://github.com/Hiroyuki-Kobayashi-12/DLC-FaceDetection-PRE)
 
 ---
 
-## 2. 使用環境
+## 1. この環境の目的
 
-- コード管理：GitHub
-- コード編集・Git操作：VS Code
-- モデル学習：Kaggle
-- 推論・評価：ローカル環境
-- データセット：WIDER FACE
-- 学習データ：WIDER FACE Train
-- 評価データ：WIDER FACE Validation
-- 評価指標：Easy AP、Medium AP、Hard AP
+このリポジトリは、DLC26前半のWIDER FACEを用いた顔検出タスクに向けて、GitHubによる実験管理を練習するための環境です。
 
-学習はKaggleで実施します。
+参加者は、自分のsandboxブランチを作成し、GitHubとVS Codeの基本操作や、実験履歴の管理方法を実際に試します。
 
-Kaggleで出力した学習済みモデルをローカル環境へ取得し、WIDER FACE Validationに対する推論と評価を行います。
+主な練習内容は次のとおりです。
+
+- Branchを作成し、参加者ごとの作業環境を分ける
+- VS Codeで変更内容と差分を確認する
+- Commitで実験の変更履歴を残す
+- Pushしてローカルの変更をGitHubへ反映する
+- Tagで実験完了時点を記録・比較する
+- Issueで課題や疑問を共有する
+- Pull Requestで共通環境への改善を提案する
+- Kaggleで学習し、ローカル環境で推論・評価する流れを確認する
+
+> **まずは、この練習用リポジトリで自由に操作してみましょう。**  
+> 操作を間違えたり、実験に失敗したりしても問題ありません。
+>
+> GitHubとVS Codeの基本操作を確認できたら、本番リポジトリへ移動し、実際の顔検出実験を始めましょう。
+>
+> **本番リポジトリ：**  
+> [後日、本番リポジトリのURLを記載]
 
 ---
 
-## 3. ディレクトリ構造
+## 2. リポジトリの基本構成
 
 ```text
-DLC-2026-FaceDetection/
+DLC-FaceDetection-PRE/
 ├── data/
 ├── kaggle_line/
 ├── results/
@@ -54,651 +49,530 @@ DLC-2026-FaceDetection/
 
 ### `data/`
 
-WIDER FACEに関するデータ、アノテーション、評価に必要なファイルを配置します。
+WIDER FACEの学習・評価で使用するデータ、アノテーション、Easy・Medium・Hardの評価情報、評価スクリプトなどを配置します。
 
-主に以下を想定しています。
-
-- WIDER FACE Train
-- WIDER FACE Validation
-- 学習用アノテーション
-- Validation用の正解情報
-- Easy、Medium、Hardの評価情報
-- WIDER FACEの評価スクリプト
-
-データセットの画像など、容量が大きいファイルはGitHubでは管理しません。
+データ本体は容量が大きいため、原則としてGitHubへ登録しません。
 
 ### `kaggle_line/`
 
-Kaggle Notebookで使用する学習コードを配置します。
+Kaggle Notebookへ貼り付けて使用する学習コードを配置します。
 
-Kaggle Notebookの各セルに対応する形で、Pythonファイルを分割します。
-
-例：
-
-```text
-kaggle_line/
-├── cell_01_config.py
-├── cell_02_model_create.py
-├── cell_03_loss_create.py
-├── cell_04_optimizer_create.py
-├── cell_05_scheduler_create.py
-├── cell_06_transforms_create.py
-└── cell_07_train.py
-```
-
-参加者は、自分のBranch上で`kaggle_line/`を自由に変更できます。
-
-変更対象として、以下を想定しています。
-
-- Config
-- Model
-- Backbone
-- Loss
-- Optimizer
-- Scheduler
-- Transform
-- Data Augmentation
-- Hyperparameter
-- 学習処理
-
-### `results/`
-
-Kaggleで学習したモデル、ローカル評価の結果、可視化などを配置します。
-
-例：
-
-```text
-results/
-├── model/
-│   ├── best_model.pth
-│   └── model_info.json
-│
-├── evaluation/
-│   ├── evaluation.md
-│   ├── metrics.json
-│   └── metrics.csv
-│
-└── visualization/
-    ├── training_loss.png
-    ├── learning_rate.png
-    ├── easy_pr_curve.png
-    ├── medium_pr_curve.png
-    ├── hard_pr_curve.png
-    └── prediction_samples/
-```
-
-学習済みモデルは容量が大きくなる可能性があります。
-
-モデルをGitHubで共有する方法については、ファイルサイズを確認したうえで、Git LFSなどの利用を検討します。
+モデル、Loss、Optimizer、Scheduler、Transform、ハイパーパラメータなどは、各参加者のsandboxブランチ上で自由に変更できます。
 
 ### `tools/`
 
-ローカルで使用する推論、評価、可視化などの処理を配置します。
+ローカル環境で使用する推論、評価、可視化のコードを配置します。
 
-例：
+### `results/`
 
-```text
-tools/
-├── predict.py
-├── evaluate.py
-└── visualize.py
-```
+現在の実験で生成した評価結果、実験サマリー、代表的な可視化、モデルの保存先情報などを記録します。
 
-`tools/`から`data/`内のWIDER FACE評価スクリプトや正解情報を使用し、以下を実施する想定です。
-
-- 学習済みモデルの読み込み
-- WIDER FACE Validationへの推論
-- 予測結果の出力
-- Easy APの計算
-- Medium APの計算
-- Hard APの計算
-- Precision-Recall Curveの作成
-- 推論結果の可視化
+大容量モデルや大量の可視化ファイルをGitHubへ登録するかどうかは、ファイルサイズと利用条件を確認して判断します。
 
 ---
 
-## 4. GitHub Branchの考え方
+## 3. Gitの役割
 
 ### `main`
 
-`main`は、全参加者が実験を開始するための共通環境です。
+`main`は、全参加者が実験を開始するための安定した基準環境です。
+
+`main`では、次の状態を維持します。
+
+- 新しい参加者がCloneできる
+- Kaggle学習の構成を確認できる
+- ローカルで推論・評価できる
+- Easy AP、Medium AP、Hard APを計算できる
+- 実行方法をREADMEから確認できる
+- 年度ごとに記録を残す
+
+原則として、`main`へ直接Commit・Pushしません。
+
+### `sandbox/<参加者名>`
+
+参加者ごとに、日常的な実験を行う長寿命ブランチを作成します。
 
 ```text
 main
-├── 共通の初期学習環境
-├── 共通の初期評価環境
-├── WIDER FACE評価基盤
-└── 利用方法
+├── sandbox/kobayashi
+├── sandbox/sato
+└── sandbox/<新しい参加者名>
 ```
 
-`main`では、原則として直接作業しません。
+sandboxでは、次の変更を許容します。
 
-共通環境を変更する場合は、Branch上で変更し、Pull Requestを通して反映します。
+- モデルの変更
+- Loss、Optimizer、Schedulerの変更
+- TransformやData Augmentationの変更
+- ハイパーパラメータの変更
+- Kaggle学習コードの変更
+- 評価・可視化方法の試行
+- 実験途中の状態
+- 失敗した実験
+- 一時的に動かない状態
 
-### 参加者用Branch
-
-参加者ごとにBranchを作成します。
-
-Branch名は、以下の形式を基本とします。
-
-```text
-member/<GitHubユーザー名または参加者名>
-```
-
-例：
-
-```text
-member/kobayashi
-member/sato
-member/suzuki
-```
-
-参加者用Branchを作成する理由は、新しい参加者が増えた場合でも、それぞれが独立した実験環境を持てるようにするためです。
-
-各参加者は、自分のBranch内で以下を自由に変更できます。
-
-- `kaggle_line/`
-- `tools/`
-- `results/`
-- READMEや実験メモ
-- その他、自分の実験に必要なファイル
-
-GitHubのリポジトリ内に参加者別フォルダは作成しません。
-
-誰の環境であるかは、Branch名で識別します。
+実験ごとに新しいブランチを増やさず、原則として同じsandboxブランチで継続して実験します。
+自由に実験を実施し、記録を残していきましょう。
 
 ---
 
-## 5. 初めて参加する場合
+## 4. 初回準備
 
-### 5.1 リポジトリをCloneする
+### 4.1 必要なもの
 
-GitHubのリポジトリ画面からURLを取得し、VS CodeへCloneします。
+- GitHubアカウント
+- Git
+- Visual Studio Code
+- VS Code拡張機能 `Git Graph`
+- VS Code拡張機能 `GitLens`
+- Kaggleアカウント
+- ローカル評価に必要なPython環境
+- その他Gitで有効なツールがあれば各自で導入
 
-```powershell
-git clone https://github.com/Hiroyuki-Kobayashi-12/DLC-2026-FaceDetection.git
-```
+### 4.2 Collaboratorの招待を受ける
 
-Cloneしたフォルダへ移動します。
+リポジトリ所有者からCollaboratorの招待を受け、GitHubで承認します。
+GitHubの名前を連絡してください。
 
-```powershell
-cd DLC-2026-FaceDetection
-```
+Publicリポジトリは誰でも閲覧できますが、元リポジトリへ参加者ブランチやTagをPushするには書き込み権限が必要です。
 
-### 5.2 `main`を最新化する
+<p align="center">
+    <img src="README/1.png" alt="center" width=700>
+<p align="center">
+    <em>リポジトリへCollaboratorを招待する画面</em>
+</p>
 
-```powershell
-git switch main
-git pull origin main
-```
+### 4.3 VS CodeでCloneする
 
-### 5.3 自分のBranchを作成する
+1. GitHubのリポジトリ画面を開く
+2. `Code`を選択する
+3. `HTTPS`のURLをコピーする
+4. VS Codeを開く
+5. コマンドパレットを開く(Ctrl+Shift+P)
+6. `Git: Clone`を選択する
+7. URLを貼り付ける
+8. 保存先を選択する
+9. Cloneしたフォルダを開く
 
-例として、小林が作成する場合は以下です。
+<p align="center">
+    <img src="README/2.png" alt="center" width=700>
+<p align="center">
+    <em>GitHub 'Code'ボタンを押下</em>
+</p>
 
-```powershell
-git switch -c member/kobayashi
-```
+<p align="center">
+    <img src="README/3.png" alt="center" width=700>
+<p align="center">
+    <em>コマンドパレットでGit: Cloneを選択</em>
+</p>
 
-作成したBranchをGitHubへ登録します。
+<p align="center">
+    <img src="README/4.png" alt="center" width=700>
+<p align="center">
+    <em>URLを貼り付けGitHubをCloneする</em>
+</p>
 
-```powershell
-git push -u origin member/kobayashi
-```
-
-### 5.4 現在のBranchを確認する
-
-```powershell
-git branch --show-current
-```
-
-以下のように、自分のBranch名が表示されることを確認します。
-
-```text
-member/kobayashi
-```
-
-作業を開始する前に、必ず現在のBranchを確認してください。
-
----
-
-## 6. 実験の進め方
-
-### Step 1：自分のBranchへ移動する
-
-```powershell
-git switch member/kobayashi
-```
-
-### Step 2：GitHub上の最新状態を取得する
-
-```powershell
-git pull origin member/kobayashi
-```
-
-### Step 3：`kaggle_line/`を変更する
-
-実験内容に合わせて、Kaggle用コードを変更します。
-
-例：
-
-```text
-kaggle_line/
-├── cell_01_config.py
-├── cell_02_model_create.py
-├── cell_03_loss_create.py
-├── cell_04_optimizer_create.py
-├── cell_05_scheduler_create.py
-├── cell_06_transforms_create.py
-└── cell_07_train.py
-```
-
-変更例：
-
-- Model構造を変更する
-- Backboneを変更する
-- Lossを変更する
-- Optimizerを変更する
-- Schedulerを変更する
-- Data Augmentationを変更する
-- Image Sizeを変更する
-- Batch Sizeを変更する
-- Learning Rateを変更する
-- Epoch数を変更する
-
-### Step 4：変更内容を確認する
-
-```powershell
-git status
-```
-
-差分を確認します。
-
-```powershell
-git diff
-```
-
-### Step 5：変更をCommitする
-
-変更したファイルをステージします。
-
-```powershell
-git add kaggle_line
-```
-
-Commitします。
-
-```powershell
-git commit -m "experiment: モデル構成を変更"
-```
-
-変更内容ごとにCommitを分けることを推奨します。
-
-例：
-
-```text
-experiment: 入力画像サイズを変更
-experiment: Focal Lossを追加
-experiment: AdamWの設定を変更
-experiment: Cosine Schedulerを追加
-experiment: Data Augmentationを変更
-fix: Kaggle学習時のエラーを修正
-```
-
-### Step 6：GitHubへPushする
-
-```powershell
-git push
-```
-
-これにより、GitHub上の自分のBranchへ変更が反映されます。
 
 ---
 
-## 7. Kaggleでの学習
+## 5. 自分のsandboxブランチを作る
 
-自分のBranchにある`kaggle_line/`の内容を、Kaggle Notebookの対応するセルへ反映します。
+### 5.1 `main`へ移動する
 
-例：
+VS Code左下のブランチ名を選択し、`main`へ切り替えます。
+
+<p align="center">
+    <img src="README/5.png" alt="center" width=700>
+<p align="center">
+    <em>Git上での現在地がここに表記される</em>
+</p>
+
+### 5.2 最新状態を取得する
+
+VS Codeのソース管理画面からFetchまたはPullを実行し、GitHub上の最新状態を取得します。
+
+- Fetch：GitHub上の最新ブランチ、Commit、Tag情報を取得する
+- Pull：現在のブランチへGitHub上の変更内容を反映する
+
+### 5.3 sandboxブランチを作成する
+
+VS Code左下のブランチ名を選択し、`新しいブランチの作成`を選びます。
+
+<p align="center">
+    <img src="README/6.png" alt="center" width=700>
+<p align="center">
+    <em>新しいブランチの作成ボタン</em>
+</p>
+
+ブランチ名は次の形式にします。
 
 ```text
-cell_01_config.py
-→ Kaggle NotebookのConfigセル
-
-cell_02_model_create.py
-→ Model作成セル
-
-cell_03_loss_create.py
-→ Loss作成セル
-
-cell_04_optimizer_create.py
-→ Optimizer作成セル
-
-cell_05_scheduler_create.py
-→ Scheduler作成セル
-
-cell_06_transforms_create.py
-→ Transform作成セル
-
-cell_07_train.py
-→ 学習実行セル
+sandbox/<参加者名>
 ```
 
-Kaggle上だけでコードを変更した場合は、同じ変更を自分のBranchにも反映してCommitしてください。
+例：
+<p align="center">
+    <img src="README/7.png" alt="center" width=700>
+<p align="center">
+    <em>新しいブランチを作成</em>
+</p>
 
-Kaggle上だけに存在する変更を残さないようにします。
+<p align="center">
+    <img src="README/8.png" alt="center" width=700>
+<p align="center">
+    <em>作成後現在地が新規ブランチになっているか確認</em>
+</p>
 
-学習後は、以下を取得します。
+作成元は`main`を選択します。
+＊作成元からブランチは派生します。
 
-- 学習済みモデル
-- 学習Loss
-- Learning Rateの履歴
-- Best Epoch
-- 学習時間
-- その他の学習結果
+### 5.4 ブランチをGitHubへ公開する
+
+ローカルでブランチを作成しただけでは、GitHub上には存在しません。
+
+VS Codeに表示される`ブランチの発行`または`Publish Branch`を選択し、GitHubの`origin`へブランチを公開します。
+
+<p align="center">
+    <img src="README/9.png" alt="center" width=700>
+<p align="center">
+    <em>Git Lens ブランチ発行ボタン</em>
+</p>
+
+<p align="center">
+    <img src="README/10.png" alt="center" width=700>
+<p align="center">
+    <em>GitHub上で新規ブランチが反映</em>
+</p>
 
 ---
 
-## 8. ローカルでの推論・評価
+## 6. 日常の実験手順
 
-Kaggleで作成した学習済みモデルを、ローカル環境へ手動で取得します。
+### 6.1 作業前に現在のブランチを確認する
 
-取得したモデルを`results/`へ配置します。
+VS Code左下が、自分のsandboxブランチになっていることを確認します。
+
+```text
+sandbox/kobayashi
+```
+
+`main`や他の参加者のsandboxで作業しないでください。
+
+### 6.2 Kaggle用コードを利用する
+
+`kaggle_line/`には、Kaggle Notebookで使用するコードをセル単位で配置します。
+
+各ファイルの内容を、対応するKaggle Notebookのセルへ順番に貼り付けて実行することで、同じ学習環境を再現できます。
+
+### 6.3 差分を確認する
+
+VS Codeのソース管理を開き、変更されたファイルを選択します。
+
+差分画面で、変更前と変更後を確認します。
+
+- `M`：変更されたファイル
+- `U`：新しく追加されたファイル
+- `D`：削除されたファイル
+
+### 6.4 ステージする
+
+Commitへ含めるファイルの`+`ボタンを選択します。
+
+変更ファイルが`Changes`から`Staged Changes`へ移動したことを確認します。
+
+### 6.5 Commitする
+
+Commitメッセージには、何を変更したかを簡潔に記載します。
 
 例：
 
 ```text
-results/
-└── model/
-    └── best_model.pth
+experiment: 入力画像サイズを変更 #3
+experiment: Focal Lossを追加 #3
+experiment: Scheduler設定を変更 #3
+fix: 評価時の座標変換を修正 #5
 ```
 
-`tools/`内の処理を使用し、WIDER FACE Validationに対して推論と評価を行います。
+Issueと関連する変更では、CommitメッセージへIssue番号を記載します。
 
-評価指標は以下です。
+### 6.6 GitHubへ反映する
+
+Commitは、最初にローカルGitへ保存されます。
+
+```text
+Commit
+└── ローカルにだけ保存
+```
+
+他の参加者やGitHubから確認できるようにするには、必ずPushまたは変更の同期を実行します。
+
+```text
+Commit
+↓
+Push／変更の同期
+↓
+origin/sandbox/<参加者名>へ反映
+```
+
+VS Codeで`変更の同期 1↑`などが表示されている場合、GitHubへ送信していないCommitがあります。
+
+同期後は、Git Graph上でローカルブランチと`origin`側のブランチが同じCommitを指していることを確認します。
+
+<p align="center">
+    <img src="README/11.png" alt="center" width=700>
+<p align="center">
+    <em>ステージ後、コミットメッセージを記入</em>
+</p>
+
+<p align="center">
+    <img src="README/12.png" alt="center" width=700>
+<p align="center">
+    <em>プッシュボタンを押下しGitHubへ反映</em>
+</p>
+
+> 重要：ローカルでCommitしただけでは、GitHubには反映されません。作業を共有する場合は、必ずPushまたは変更の同期まで実施してください。
+
+---
+
+## 7. Kaggleで学習する
+
+1. GitHub上で自分のsandboxブランチを開く
+2. `kaggle_line/`のコードを確認する
+3. 対応するKaggle Notebookのセルへ反映する
+4. WIDER FACE Trainで学習する
+5. 学習済みモデルと学習履歴を保存する
+6. Kaggle上で追加変更した場合は、同じ変更をsandboxブランチへ戻す
+7. 変更をCommitし、GitHubへPushする
+
+Kaggle上だけに存在するコード変更を残さないようにします。
+
+---
+
+## 8. ローカルで推論・評価する
+
+Kaggleで生成した学習済みモデルを取得し、ローカル環境でWIDER FACE Validationへの推論と評価を行います。
+
+評価指標は次の3つです。
 
 - Easy AP
 - Medium AP
 - Hard AP
 
-評価後は、以下のようなファイルを`results/`へ保存します。
+評価後は、次の情報を`results/`へ記録します。
 
-```text
-results/
-├── model/
-│   ├── best_model.pth
-│   └── model_info.json
-│
-├── evaluation/
-│   ├── evaluation.md
-│   ├── metrics.json
-│   └── metrics.csv
-│
-└── visualization/
-    ├── training_loss.png
-    ├── learning_rate.png
-    ├── easy_pr_curve.png
-    ├── medium_pr_curve.png
-    ├── hard_pr_curve.png
-    └── prediction_samples/
-```
+- 実験ID
+- 使用したデータセット
+- 学習条件
+- 評価条件
+- Easy AP
+- Medium AP
+- Hard AP
+- 学習済みモデルの保存先
+- モデルのハッシュまたは識別情報
+- 代表的なグラフ
+- 分かったこと
+- 失敗したこと
+- 次に試したいこと
+
+実験結果を自由に記録していきましょう！
+人に説明できる根拠を残すことを意識するとよいです。
+大量の予測ファイルや大容量モデルをGitHubへ入れる場合は、必ず事前に共有方法を確認します。
 
 ---
 
-## 9. Experiment IDの考え方
+## 9. 実験をTagで記録する
 
-本プロジェクトでは、実験ごとにフォルダを複製することを必須としません。
+### 9.1 Tagの役割
 
-各参加者のBranchにある環境全体を、1つの実験環境として扱います。
-
-```text
-member/kobayashi
-├── data/
-├── kaggle_line/
-├── results/
-├── tools/
-├── .gitignore
-└── README.md
-```
-
-Model、Loss、Scheduler、学習済みモデル、評価結果、可視化を含む環境全体を、Experimentとして記録します。
-
-Experiment IDの例：
+細かな試行錯誤はCommitで残し、学習・評価・可視化まで一区切りついた時点にTagを付けます。
 
 ```text
-Experiment_001
-Experiment_002
-Experiment_003
+Commit
+└── 途中の変更履歴
+
+Tag
+└── 再現・比較したい実験完了時点
 ```
 
-実験の途中経過はCommitで記録し、実験が完了した時点はGit Tagで記録します。
+Tag名は次の形式にします。
 
----
-
-## 10. ExperimentをCommitで記録する
-
-実験中は、変更内容ごとにCommitします。
-
-例：
-
-```powershell
-git add kaggle_line
-git commit -m "experiment: モデル構造を変更"
+```text
+exp/<参加者名>/<3桁の連番>-<Easy APの整数値>%
 ```
-
-```powershell
-git add kaggle_line
-git commit -m "experiment: Focal Lossを追加"
-```
-
-```powershell
-git add kaggle_line
-git commit -m "experiment: Schedulerを変更"
-```
-
-評価結果を保存した後、環境全体をCommitします。
-
-```powershell
-git add .
-git commit -m "experiment: Experiment_001を完了"
-git push
-```
-
-モデルファイルがGit管理対象外になっている場合は、モデル以外の結果だけがCommitされます。
-
-学習済みモデルの共有方法は、ファイルサイズを確認して別途決定します。
-
----
-
-## 11. ExperimentをTagで記録する
-
-実験完了時点のCommitにTagを付けます。
-
-Tag名には、参加者名とExperiment IDを含めます。
 
 例：
 
 ```text
-kobayashi-experiment-001
-kobayashi-experiment-002
-sato-experiment-001
-suzuki-experiment-001
+exp/kobayashi/001-073%
+exp/kobayashi/002-080%
+exp/sato/001-099%
 ```
 
-小林の1回目の実験にTagを付ける場合は以下です。
+### 9.2 Git GraphでTagを作る
 
-```powershell
-git tag -a "kobayashi-experiment-001" -m "Experiment_001"
-```
+1. 実験結果までCommitする
+2. Pushまたは変更の同期を行う
+3. Git Graphを開く
+4. 実験完了Commitを右クリックする
+5. `Add Tag`を選択する
+6. Typeは`Annotated Tag`を選択する
+7. Tag名を入力する
+8. Tagメッセージを入力する
+9. 作成したTagを右クリックする
+10. `Push Tag`を選択する
+11. Push先に`origin`を選択する
 
-TagをGitHubへPushします。
+<p align="center">
+    <img src="README/13.png" alt="center" width=700>
+<p align="center">
+    <em>実験完了CommitにTagを追加</em>
+</p>
 
-```powershell
-git push origin "kobayashi-experiment-001"
-```
-
-これにより、Tagが付いた時点の環境全体が`Experiment_001`として記録されます。
+> Tagもローカルで作成しただけではGitHubに反映されません。作成後は必ず`Push Tag`を実行してください。
 
 ---
 
-## 12. Experiment間の差分を確認する
+## 10. 実験Tagを比較する
 
-実験間の変更内容は、Gitで比較できます。
+Experiment間の差分はGitLensを使用して確認します。
 
-例：
-
-```powershell
-git diff kobayashi-experiment-001 kobayashi-experiment-002
-```
-
-`kaggle_line/`だけを比較する場合は以下です。
-
-```powershell
-git diff `
-  kobayashi-experiment-001 `
-  kobayashi-experiment-002 `
-  -- kaggle_line
-```
-
-特定のExperiment時点の内容を確認する場合は以下です。
-
-```powershell
-git show kobayashi-experiment-001
-```
-
-特定のExperiment時点へ一時的に移動する場合は以下です。
-
-```powershell
-git switch --detach kobayashi-experiment-001
-```
-
-確認後は、自分のBranchへ戻ります。
-
-```powershell
-git switch member/kobayashi
-```
-
----
-
-## 13. 次のExperimentへ進む
-
-`Experiment_001`へTagを付けた後も、同じ参加者Branchで次の変更を行います。
-
-```text
-member/kobayashi
-
-kobayashi-experiment-001
-└── Experiment_001完了時点
-
-現在のBranch先端
-└── Experiment_002に向けた作業
-```
-
-`Experiment_002`が完了したら、同様にCommitとTagを作成します。
-
-```powershell
-git add .
-git commit -m "experiment: Experiment_002を完了"
-git push
-```
-
-```powershell
-git tag -a "kobayashi-experiment-002" -m "Experiment_002"
-git push origin "kobayashi-experiment-002"
-```
-
-この流れを繰り返します。
-
----
-
-## 14. 他の参加者の環境を見る
-
-GitHub上でBranchを切り替えることで、他の参加者の環境を確認できます。
+1. VS CodeでGitLensを開く
+2. `Search & Compare`または`Compare References`を開く
+3. 比較元のTagを選ぶ
+4. 比較先のTagを選ぶ
+5. 変更されたファイル一覧を確認する
+6. ファイルを選択して差分を表示する
 
 例：
 
 ```text
-main
-member/kobayashi
-member/sato
-member/suzuki
+exp/kobayashi/001-073%
+と
+exp/kobayashi/002-080%
+を比較
 ```
 
-ローカル環境で他のBranchを確認する場合は、最初に最新情報を取得します。
+主な比較対象は次のとおりです。
 
-```powershell
-git fetch --all --tags
-```
+- Modelの変更
+- Lossの変更
+- Optimizerの変更
+- Schedulerの変更
+- Transformの変更
+- ハイパーパラメータの変更
+- Easy AP、Medium AP、Hard APの変化
+- 可視化結果の変化
 
-他の参加者のBranchへ移動します。
-
-```powershell
-git switch member/sato
-```
-
-確認後は自分のBranchへ戻ります。
-
-```powershell
-git switch member/kobayashi
-```
-
-他の参加者のBranchを変更する場合は、事前に本人と相談してください。
+<p align="center">
+    <img src="README/14.png" alt="center" width=700>
+<p align="center">
+    <em>GitLensのCompareボタン</em>
+</p>
+<p align="center">
+    <img src="README/15.png" alt="center" width=700>
+<p align="center">
+    <em>Tag同士の比較</em>
+</p>
 
 ---
 
-## 15. `main`へ共有するもの
+## 11. Issueの使い方(未確定)
 
-参加者Branchのすべてを、毎回`main`へ統合する必要はありません。
+Issueは実験番号としてではなく、課題、疑問、仮説、相談事項、改善テーマを管理するために使用します。
 
-共有したい内容だけをPull Requestで提案します。
+### Issueの例
 
-共有対象の例：
+- Hard APが改善しない
+- Kaggleとローカルで結果が一致しない
+- 評価結果の可視化に不具合がある
+- Datasetの扱いを整理したい
+- 複数回の実験が必要なテーマ
+- 他の参加者に相談したい
+- mainの共通環境を改善したい
 
-- 他の参加者にも有効なモデル構造
-- 共通化できるLoss
-- 共通化できるOptimizer
-- 共通化できるScheduler
-- 有効なData Augmentation
-- Kaggle学習環境の改善
-- 評価処理の改善
-- バグ修正
+### Commitとの関連付け
+
+CommitメッセージへIssue番号を記載します。
+
+```text
+experiment: Focal Lossを追加 #3
+```
+
+### Tagとの関連付け
+
+実験完了後、IssueのコメントへTag名と結果を記載します。
+
+```markdown
+## 実験結果
+
+関連Tag：`exp/kobayashi/001-073%`
+
+- Easy AP：
+- Medium AP：
+- Hard AP：
+
+### 分かったこと
+
+### 次に試すこと
+```
+
+1つのIssueに、複数人、複数の実験Tagを関連付けて構いません。
+
+### 推奨ラベル
+
+```text
+scope: personal
+scope: team
+scope: main
+
+area: training
+area: dataset
+area: evaluation
+area: visualization
+area: environment
+area: git
+
+status: blocked
+status: needs-help
+status: needs-review
+```
+
+最初からすべてのラベルを作らず、必要になったものから追加します。
+
+<!-- 画像予定：GitHubでIssueを作成する画面 -->
+<!-- 画像予定：Issue番号を含むCommit -->
+<!-- 画像予定：IssueへTagと評価結果を追記した画面 -->
+
+---
+
+## 12. Pull Requestの使い方(未確定)
+
+sandboxで行ったすべての実験をmainへMergeする必要はありません。
+
+mainへ戻すのは、他の参加者にも有効な改善です。
+
+例：
+
+- 学習コードのバグ修正
+- 評価コードの改善
+- 可視化処理の改善
+- 共通利用できるLossやScheduler
+- データパス処理
 - READMEや手順書の改善
+- 安定したBaseline設定
 
-実験環境全体を共有したい場合は、Branch名とTag名を共有します。
-
-```text
-Branch：member/kobayashi
-Tag：kobayashi-experiment-001
-```
-
-他の参加者は、そのTagを確認することで、実験時点の環境全体を確認できます。
-
----
-
-## 16. Pull Requestの使い方
-
-共通環境へ反映したい変更がある場合は、Pull Requestを作成します。
-
-```text
-member/kobayashi
-        ↓
-Pull Request
-        ↓
-main
-```
-
-Pull Requestには、以下を記載します。
+Pull Requestには次を記載します。
 
 ```markdown
 ## 変更内容
 
-今回変更した内容を記載します。
+## 関連Issue
 
-## Experiment
+Related to #3
 
-- Branch：
-- Tag：
-- Experiment ID：
+## 関連実験Tag
+
+`exp/kobayashi/001-073%`
 
 ## 評価結果
 
@@ -706,118 +580,224 @@ Pull Requestには、以下を記載します。
 - Medium AP：
 - Hard AP：
 
-## mainへ反映したい内容
-
-共通環境へ反映したいファイルや処理を記載します。
+## mainへ反映したい理由
 
 ## 確認してほしいこと
-
-レビューやディスカッションで確認してほしいことを記載します。
 ```
 
-`main`へ反映するかどうかは、Pull Request上の確認とディスカッションを通じて決定します。
-
----
-
-## 17. GitHub運用ルール
-
-### ルール1
-
-`main`へ直接Pushしません。
-
-### ルール2
-
-参加者ごとに自分のBranchを作成します。
+IssueをmainへのMergeによって解決する場合だけ、Pull Request本文に次を記載します。
 
 ```text
-member/<参加者名>
+Fixes #3
 ```
 
-### ルール3
-
-作業開始前に現在のBranchを確認します。
-
-```powershell
-git branch --show-current
-```
-
-### ルール4
-
-変更内容ごとにCommitを作成します。
-
-### ルール5
-
-Kaggle上だけに変更を残しません。
-
-### ルール6
-
-Experiment完了時に、結果をCommitしてTagを付けます。
-
-### ルール7
-
-Tag名には、参加者名とExperiment IDを含めます。
-
-### ルール8
-
-共通環境へ変更を反映する場合は、Pull Requestを作成します。
-
-### ルール9
-
-他の参加者のBranchを勝手に変更しません。
-
-### ルール10
-
-秘密情報や個人情報をCommitしません。
+<!-- 画像予定：Pull Request作成画面 -->
+<!-- 画像予定：Reviewer指定画面 -->
+<!-- 画像予定：Files changedの差分確認画面 -->
 
 ---
 
-## 18. 最初に試す手順
+## 13. 他の参加者の作業を確認する
 
-最初は、次の流れを一度試します。
+### Fetchする
+
+他の参加者がPushしたブランチ、Commit、TagをVS Codeへ取得するにはFetchを実行します。
+
+VS Codeのコマンドパレットから`Git: Fetch`を選択するか、Git GraphのFetch操作を使用します。
+
+FetchはGitHub上の最新情報を取得しますが、現在の作業ファイルは変更しません。
+
+### ブランチを確認する
+
+Git GraphまたはGitLensで、次のようなリモートブランチを表示します。
 
 ```text
-1. リポジトリをCloneする
-2. 自分のmember Branchを作る
-3. kaggle_lineのファイルを1つ変更する
-4. 変更内容を確認する
-5. Commitする
-6. GitHubへPushする
-7. Kaggleで学習する
-8. 学習済みモデルをローカルへ取得する
-9. WIDER FACE Validationで評価する
-10. resultsへ評価結果を保存する
-11. Experiment完了Commitを作る
-12. Experiment Tagを作る
-13. Experiment間の差分を確認する
-14. 必要に応じてPull Requestを作る
+origin/sandbox/sato
+origin/sandbox/suzuki
 ```
 
-最初からすべてを完成させる必要はありません。
+確認だけの場合は、Git GraphやGitLensからCommitと差分を確認します。
 
-Branch、Commit、Push、Tagの流れを確認しながら、少しずつ環境を整えていきます。
+他の参加者のブランチへ切り替えて確認する場合は、未Commitの変更がないことを確認してから実施します。確認後は、自分のsandboxブランチへ戻ります。
+
+<!-- 画像予定：Git GraphのFetchボタン -->
+<!-- 画像予定：他の参加者のoriginブランチ -->
+<!-- 画像予定：他ブランチのCommit詳細 -->
 
 ---
 
-## 19. 大切にしたいこと
+## 14. ローカルとoriginの違い
 
-本ワークショップでは、最も高いAPを出すことだけを目的にしません。
+Gitでは、PC内の履歴とGitHub上の履歴を区別します。
 
-以下の共有を歓迎します。
+```text
+sandbox/kobayashi
+└── ローカルPC上のブランチ
 
-- 未完成のアイデア
-- 初歩的な質問
-- 実装途中の相談
-- 学習が動かなかった原因
-- Checkpointを読み込めなかった問題
-- Easyだけ改善した結果
-- Hardだけ低下した結果
-- 仮説と異なった結果
-- 精度が下がった実験
-- 次に何を試すべきか分からない状況
-- 他の参加者に一緒に確認してほしい結果
+origin/sandbox/kobayashi
+└── GitHub上のブランチ
+```
 
-参加者Branchは、それぞれが自由に試行錯誤するための実験環境です。
+`origin`は余分なブランチではなく、GitHub側の状態を表す名前です。
 
-Commitには変更の意図を残し、TagにはExperimentの完了時点を残します。
+### 正常な共有状態
 
-結果だけでなく、どのように考え、どのように環境を変えたかをGitHub上へ残すことで、個人の経験をチーム全体の知見へ変えていきます。
+```text
+sandbox/kobayashi
+origin/sandbox/kobayashi
+```
+
+この2つがGit Graph上で同じCommitを指していれば、ローカルの変更がGitHubへ反映されています。
+
+### 未Pushの状態
+
+ローカル側だけが先へ進み、`1↑`などが表示されている場合、GitHubへ送信していないCommitがあります。
+
+Pushまたは変更の同期を実行してください。
+
+---
+
+## 15. 禁止事項・注意事項
+
+### mainへ直接Pushしない
+
+共通環境を変更する場合は、sandboxまたは一時ブランチで作業し、Pull Requestを作成します。
+
+### 他の参加者のsandboxを変更しない
+
+確認することはできますが、本人の同意なくCommitやPushを行わないでください。
+
+### 大容量データをCommitしない
+
+次のようなファイルは、原則としてGitHubへ登録しません。
+
+- WIDER FACE画像本体
+- 大量の予測結果
+- キャッシュ
+- 一時ファイル
+- 大容量モデル
+- 大量の可視化結果
+
+### 秘密情報をCommitしない
+
+次をGitHubへ登録しないでください。
+
+- Kaggle API Token
+- `kaggle.json`
+- パスワード
+- アクセストークン
+- `.env`
+- 個人情報
+- 社内限定情報
+
+### Commit前に対象を確認する
+
+VS Codeのソース管理で、ステージ対象にデータや秘密情報が含まれていないことを確認します。
+
+---
+
+## 16. Experiment完了チェックリスト
+
+Tagを付ける前に、次を確認します。
+
+- [ ] 使用データを特定できる
+- [ ] Kaggle学習コードがCommitされている
+- [ ] Kaggle上だけの変更が残っていない
+- [ ] 学習設定とSeedが記録されている
+- [ ] 学習済みモデルの保存先が記録されている
+- [ ] ローカル評価を再実行できる
+- [ ] Easy APが記録されている
+- [ ] Medium APが記録されている
+- [ ] Hard APが記録されている
+- [ ] 代表的な可視化が保存されている
+- [ ] 分かったことと失敗したことが記録されている
+- [ ] 関連Issueが記録されている
+- [ ] すべての変更をCommitした
+- [ ] sandboxブランチをoriginへPushした
+- [ ] Annotated Tagを作成した
+- [ ] TagをoriginへPushした
+
+---
+
+## 17. 困ったとき
+
+### 他の人の変更が見えない
+
+Fetchを実行します。
+
+### CommitしたのにGitHubへ反映されない
+
+Commitはローカル保存です。Pushまたは変更の同期を実行します。
+
+### TagがGitHubへ反映されない
+
+Tagを右クリックし、`Push Tag`から`origin`へPushします。
+
+### Branchを切り替えられない
+
+未Commitの変更が残っていないか、VS Codeのソース管理で確認します。
+
+### dataが大量にステージされた
+
+Commitせず、`.gitignore`の設定とステージ状態を確認します。
+
+### 操作に迷った
+
+Issueを作成し、`status: needs-help`または`area: git`を付けて相談します。
+
+---
+
+## 18. 最小の運用ルール
+
+参加者は、まず次の流れを守ってください。
+
+1. `main`から自分の`sandbox/<名前>`を作る
+2. 作業前に現在のブランチを確認する
+3. 変更を小さな単位でCommitする
+4. Commit後はPushまたは変更の同期を行う
+5. 疑問や課題はIssueに記録する
+6. CommitへIssue番号を含める
+7. 実験完了時にAnnotated Tagを作る
+8. TagもoriginへPushする
+9. 共通化できる改善はPull Requestでmainへ提案する
+10. データ、秘密情報、大容量成果物を誤ってCommitしない
+
+---
+
+## 19. 用語
+
+### Branch
+
+作業環境を分けるものです。本プロジェクトでは、参加者ごとのsandboxを作ります。
+
+### Commit
+
+ローカルGitへ変更履歴を保存する操作です。CommitだけではGitHubへ反映されません。
+
+### Push
+
+ローカルのCommitやTagをGitHubのoriginへ送る操作です。
+
+### Fetch
+
+GitHubの最新Branch、Commit、Tag情報をローカルへ取得する操作です。現在の作業ファイルは変更しません。
+
+### Pull
+
+GitHub上の変更を、現在のローカルブランチへ取り込む操作です。
+
+### Tag
+
+特定のCommitへ付ける固定の目印です。本プロジェクトでは、実験完了時点を記録します。
+
+### origin
+
+GitHub上のリモートリポジトリを表す標準的な名前です。
+
+### Issue
+
+課題、疑問、仮説、相談、改善テーマを継続的に管理する場所です。
+
+### Pull Request
+
+sandboxや一時ブランチの変更をmainへ提案し、レビューとディスカッションを行う仕組みです。
