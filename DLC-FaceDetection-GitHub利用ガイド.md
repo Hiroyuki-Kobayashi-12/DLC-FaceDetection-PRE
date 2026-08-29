@@ -2,29 +2,36 @@
 
 この文書は、DLC参加者がGitHubとVS Codeを使って、顔検出の実験環境を安全に利用するための手順とルールをまとめたものです。
 
-対象リポジトリ：
+練習用リポジトリ：
 
-- <https://github.com/Hiroyuki-Kobayashi-12/DLC-FaceDetection-PRE>
-
-> この文書は初期版です。画面構成や運用を実際に試しながら、スクリーンショットと説明を追加します。
+- [DLC-FaceDetection-PRE](https://github.com/Hiroyuki-Kobayashi-12/DLC-FaceDetection-PRE)
 
 ---
 
 ## 1. この環境の目的
 
-このリポジトリは、DLC26前半のWIDER FACEを用いた顔検出タスクで、参加者が自由に実験するための共通環境です。
+このリポジトリは、DLC26前半のWIDER FACEを用いた顔検出タスクに向けて、GitHubによる実験管理を練習するための環境です。
 
-主な目的は次のとおりです。
+参加者は、自分のsandboxブランチを作成し、GitHubとVS Codeの基本操作や、実験履歴の管理方法を実際に試します。
 
-- Kaggleで顔検出モデルを学習する
-- ローカル環境で推論と評価を行う
-- Easy AP、Medium AP、Hard APを記録する
-- 実験の変更履歴をGitで残す
-- 実験結果をTagで再現・比較できるようにする
-- 課題や疑問をIssueで共有する
-- 共通化できる改善をPull Requestでmainへ戻す
+主な練習内容は次のとおりです。
 
-Gitの操作を増やすこと自体が目的ではありません。実験速度を落とさず、再現性、比較可能性、共有可能性を高めることを目的とします。
+- Branchを作成し、参加者ごとの作業環境を分ける
+- VS Codeで変更内容と差分を確認する
+- Commitで実験の変更履歴を残す
+- Pushしてローカルの変更をGitHubへ反映する
+- Tagで実験完了時点を記録・比較する
+- Issueで課題や疑問を共有する
+- Pull Requestで共通環境への改善を提案する
+- Kaggleで学習し、ローカル環境で推論・評価する流れを確認する
+
+> **まずは、この練習用リポジトリで自由に操作してみましょう。**  
+> 操作を間違えたり、実験に失敗したりしても問題ありません。
+>
+> GitHubとVS Codeの基本操作を確認できたら、本番リポジトリへ移動し、実際の顔検出実験を始めましょう。
+>
+> **本番リポジトリ：**  
+> [後日、本番リポジトリのURLを記載]
 
 ---
 
@@ -311,9 +318,17 @@ VS Codeで`変更の同期 1↑`などが表示されている場合、GitHubへ
 
 同期後は、Git Graph上でローカルブランチと`origin`側のブランチが同じCommitを指していることを確認します。
 
-<!-- 画像予定：Commitメッセージ入力欄 -->
-<!-- 画像予定：変更の同期 1↑が表示された状態 -->
-<!-- 画像予定：同期後にlocalとoriginが同じCommitを指すGit Graph -->
+<p align="center">
+    <img src="README/11.png" alt="center" width=700>
+<p align="center">
+    <em>ステージ後、コミットメッセージを記入</em>
+</p>
+
+<p align="center">
+    <img src="README/12.png" alt="center" width=700>
+<p align="center">
+    <em>プッシュボタンを押下しGitHubへ反映</em>
+</p>
 
 > 重要：ローカルでCommitしただけでは、GitHubには反映されません。作業を共有する場合は、必ずPushまたは変更の同期まで実施してください。
 
@@ -330,10 +345,6 @@ VS Codeで`変更の同期 1↑`などが表示されている場合、GitHubへ
 7. 変更をCommitし、GitHubへPushする
 
 Kaggle上だけに存在するコード変更を残さないようにします。
-
-<!-- 画像予定：GitHubでsandboxブランチを選択した画面 -->
-<!-- 画像予定：kaggle_lineのファイル一覧 -->
-<!-- 画像予定：Kaggle Notebookの対応セル -->
 
 ---
 
@@ -363,6 +374,8 @@ Kaggleで生成した学習済みモデルを取得し、ローカル環境でWI
 - 失敗したこと
 - 次に試したいこと
 
+実験結果を自由に記録していきましょう！
+人に説明できる根拠を残すことを意識するとよいです。
 大量の予測ファイルや大容量モデルをGitHubへ入れる場合は、必ず事前に共有方法を確認します。
 
 ---
@@ -384,15 +397,15 @@ Tag
 Tag名は次の形式にします。
 
 ```text
-exp-<参加者名>-<3桁の連番>
+exp/<参加者名>/<3桁の連番>-<Easy APの整数値>%
 ```
 
 例：
 
 ```text
-exp-kobayashi-001
-exp-kobayashi-002
-exp-sato-001
+exp/kobayashi/001-073%
+exp/kobayashi/002-080%
+exp/sato/001-099%
 ```
 
 ### 9.2 Git GraphでTagを作る
@@ -409,11 +422,11 @@ exp-sato-001
 10. `Push Tag`を選択する
 11. Push先に`origin`を選択する
 
-<!-- 画像予定：Git Graphの実験完了Commit -->
-<!-- 画像予定：Add Tag選択画面 -->
-<!-- 画像予定：Annotated Tagの指定画面 -->
-<!-- 画像予定：Push Tagのメニュー -->
-<!-- 画像予定：GitHub上のTags一覧 -->
+<p align="center">
+    <img src="README/13.png" alt="center" width=700>
+<p align="center">
+    <em>実験完了CommitにTagを追加</em>
+</p>
 
 > Tagもローカルで作成しただけではGitHubに反映されません。作成後は必ず`Push Tag`を実行してください。
 
@@ -433,9 +446,9 @@ Experiment間の差分はGitLensを使用して確認します。
 例：
 
 ```text
-exp-kobayashi-001
+exp/kobayashi/001-073%
 と
-exp-kobayashi-002
+exp/kobayashi/002-080%
 を比較
 ```
 
@@ -450,14 +463,20 @@ exp-kobayashi-002
 - Easy AP、Medium AP、Hard APの変化
 - 可視化結果の変化
 
-<!-- 画像予定：GitLensのCompare References -->
-<!-- 画像予定：Tagを2つ選択する画面 -->
-<!-- 画像予定：比較結果のファイル一覧 -->
-<!-- 画像予定：VS Codeのコード差分表示 -->
+<p align="center">
+    <img src="README/14.png" alt="center" width=700>
+<p align="center">
+    <em>GitLensのCompareボタン</em>
+</p>
+<p align="center">
+    <img src="README/15.png" alt="center" width=700>
+<p align="center">
+    <em>Tag同士の比較</em>
+</p>
 
 ---
 
-## 11. Issueの使い方
+## 11. Issueの使い方(未確定)
 
 Issueは実験番号としてではなく、課題、疑問、仮説、相談事項、改善テーマを管理するために使用します。
 
@@ -486,7 +505,7 @@ experiment: Focal Lossを追加 #3
 ```markdown
 ## 実験結果
 
-関連Tag：`exp-kobayashi-001`
+関連Tag：`exp/kobayashi/001-073%`
 
 - Easy AP：
 - Medium AP：
@@ -526,7 +545,7 @@ status: needs-review
 
 ---
 
-## 12. Pull Requestの使い方
+## 12. Pull Requestの使い方(未確定)
 
 sandboxで行ったすべての実験をmainへMergeする必要はありません。
 
@@ -553,7 +572,7 @@ Related to #3
 
 ## 関連実験Tag
 
-`exp-kobayashi-001`
+`exp/kobayashi/001-073%`
 
 ## 評価結果
 
