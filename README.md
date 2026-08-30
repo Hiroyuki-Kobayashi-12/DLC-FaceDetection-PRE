@@ -1,4 +1,4 @@
-# DLC Face Detection PRE 利用ガイド
+# DLC Face Detection GitHub運用ルール
 
 この文書は、DLC参加者がGitHubとVS Codeを使って、顔検出の実験環境を安全に利用するための手順とルールをまとめたものです。
 
