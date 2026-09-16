@@ -111,8 +111,8 @@ import matplotlib.pyplot as plt
 DEBUG = False
 
 # DataLoader設定
-BATCH_SIZE = 8
-NUM_WORKERS = 2
+BATCH_SIZE = 1
+NUM_WORKERS = 0
 
 # 顔検出なのでクラスは face の1クラスだけです。
 CLASS_ID = 0
