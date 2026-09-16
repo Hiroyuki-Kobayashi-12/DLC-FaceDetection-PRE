@@ -488,7 +488,7 @@ class FaceJsonDataset(Dataset):
             split=self.split,
             level=self.level,
         )
-    
+
         # ----------------------------
         # bbox座標も縮小
         # ----------------------------
@@ -499,6 +499,20 @@ class FaceJsonDataset(Dataset):
             boxes[:, [0, 2]] *= scale
             boxes[:, [1, 3]] *= scale
     
+        # ----------------------------
+        # データ拡張
+        # ----------------------------
+        if self.split == "train":
+            if random.random() < 0.5:
+                image = image.transpose(
+                    Image.FLIP_LEFT_RIGHT
+                )
+                if len(boxes) > 0:
+                    x1 = boxes[:, 0].clone()
+                    x2 = boxes[:, 2].clone()
+                    boxes[:, 0] = new_w - x2
+                    boxes[:, 2] = new_w - x1
+
         # ----------------------------
         # 顔数制限
         # ----------------------------

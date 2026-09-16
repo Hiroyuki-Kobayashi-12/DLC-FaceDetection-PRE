@@ -4,7 +4,7 @@
 
 import torch
 
-NUM_EPOCHS = 1
+NUM_EPOCHS = 10
 LEARNING_RATE = 1e-4
 
 optimizer = torch.optim.AdamW(
